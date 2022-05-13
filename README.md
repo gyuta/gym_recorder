@@ -1,10 +1,17 @@
 # gym_recorder
 
-# usage
+A recorder for open ai gym.
 
+you can easily add a text on the frame like this.
+
+![result](https://github.com/gyuta/gym_recorder/blob/main/media/example.gif?raw=true)
+
+
+## install
 ```
-pip install gym_recorder
+pip install gym_record
 ```
+## usage
 
 ```
 import gym

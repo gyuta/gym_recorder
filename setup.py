@@ -1,10 +1,10 @@
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="gym_recorder",
+    name="gym-record",
     version="0.0.1",
     author="gyuta",
     description="A recorder for open ai gym. you can easily add a text on the frame",
