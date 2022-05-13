@@ -13,7 +13,7 @@ pip install gym_record
 ```
 ## usage
 
-```
+```python
 import gym
 from gym_recorder import Recorder
 
