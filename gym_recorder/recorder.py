@@ -1,4 +1,8 @@
+from dataclasses import dataclass
+from typing import Tuple
+
 import gym
+from .const import BLACK
 import cv2
 
 class Recorder(gym.Wrapper):
@@ -7,7 +11,7 @@ class Recorder(gym.Wrapper):
     write text on a frame
     """
 
-    def __init__(self, env, path = "", videoname = "out", episode_num = 1, **kwargs):
+    def __init__(self, env, path = "", videoname = "out", episode_num = 1, codec="vp09", **kwargs):
         """
         episode_num: the number of episode a file contains
         """
@@ -16,8 +20,9 @@ class Recorder(gym.Wrapper):
         self.env = env
         self.path = path
         self.videoname = videoname
+        self.codec = codec
 
-        self.txtqueue =  []
+        self.itemqueue =  []
         self.episode_num = episode_num
         self.count_episode = 0
     
@@ -39,22 +44,28 @@ class Recorder(gym.Wrapper):
         return obs, reward, done, info
     
     def start_recording(self):
-        fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
-        self.video = cv2.VideoWriter(f'{self.path}/{self.videoname}_{self.videonumber}.mp4', fourcc, 50.0, (600, 400))
+        fourcc = cv2.VideoWriter_fourcc(*self.codec)
+        
+        video_name =  f"{self.videoname}_{self.videonumber}.mp4"
+        if self.path == "":
+            path = video_name
+        else:
+            path = f"{self.path}/{video_name}"
+        self.video = cv2.VideoWriter(path, fourcc, 50.0, (600, 400))
     
     def stop_recording(self):
         self.video.release()
         self.videonumber += 1
 
     def record_step(self):
-        frame = self.env.render("rgb_array")
+        frame = self.env.render(mode="rgb_array")
         im = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
 
         txt_pos = 10
-        for txt in self.txtqueue:
-            cv2.putText(im, txt, (5, txt_pos), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 1, cv2.LINE_AA)
+        for item in self.itemqueue:
+            cv2.putText(im, item.txt, (5, txt_pos), cv2.FONT_HERSHEY_PLAIN, 1, item.color, 1, cv2.LINE_AA)
             txt_pos += 20
-        self.txtqueue = []
+        self.itemqueue = []
         self.video.write(im)
     
     def close(self):
@@ -63,3 +74,10 @@ class Recorder(gym.Wrapper):
 
         if self.count_episode != 0:
             self.stop_recording()
+
+Color = Tuple[int, int, int]
+
+@dataclass
+class Item:
+    txt: str
+    color: Color = BLACK

@@ -1,7 +1,9 @@
 import gym
-from gym_recorder import Recorder
+from gym_recorder import Recorder, Item
+import gym_recorder
 
 src_env = gym.make("CartPole-v1")
+src_env = gym.make("LunarLander-v2")
 env = Recorder(src_env, episode_num=10)
 
 for ep in range(10):
@@ -11,9 +13,9 @@ for ep in range(10):
         action = env.action_space.sample()
         n_obs, reward, done, info = env.step(action)
 
-        env.txtqueue.append(f"episode:{ep}")
-        env.txtqueue.append(f"obs:{obs}")
-        env.txtqueue.append(f"action:{action}")
-        env.txtqueue.append(f"reward:{reward}")
-        env.txtqueue.append(f"next obs:{n_obs}")
+        env.itemqueue.append(Item(f"episode:{ep}", color = gym_recorder.WHITE))
+        env.itemqueue.append(Item(f"obs:{obs}", color = gym_recorder.WHITE))
+        env.itemqueue.append(Item(f"action:{action}", color = gym_recorder.WHITE))
+        env.itemqueue.append(Item(f"reward:{reward}", color = gym_recorder.WHITE))
+        env.itemqueue.append(Item(f"next obs:{n_obs}", color = gym_recorder.WHITE))
     
