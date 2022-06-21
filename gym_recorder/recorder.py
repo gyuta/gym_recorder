@@ -11,7 +11,7 @@ class Recorder(gym.Wrapper):
     write text on a frame
     """
 
-    def __init__(self, env, path = "", videoname = "out", episode_num = 1, codec="vp09", **kwargs):
+    def __init__(self, env, path = "", videoname = "out", episode_num = 1, codec="vp09", size=(600,400), **kwargs):
         """
         episode_num: the number of episode a file contains
         """
@@ -21,6 +21,7 @@ class Recorder(gym.Wrapper):
         self.path = path
         self.videoname = videoname
         self.codec = codec
+        self.size = size
 
         self.itemqueue =  []
         self.episode_num = episode_num
@@ -51,7 +52,7 @@ class Recorder(gym.Wrapper):
             path = video_name
         else:
             path = f"{self.path}/{video_name}"
-        self.video = cv2.VideoWriter(path, fourcc, 50.0, (600, 400))
+        self.video = cv2.VideoWriter(path, fourcc, 50.0, self.size)
     
     def stop_recording(self):
         self.video.release()

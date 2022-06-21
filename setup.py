@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gym-record",
-    version="0.0.2",
+    version="0.0.3",
     author="gyuta",
     description="A recorder for open ai gym. you can easily add a text on the frame",
     long_description=long_description,
